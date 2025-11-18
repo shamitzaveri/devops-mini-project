@@ -1,0 +1,29 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]  # Runs whenever you push to main branch
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest  # GitHub borrows a computer to run this
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # Build and Push Backend
+      - name: Build Backend Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-backend ./backend
+
+      - name: Push Backend Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/devops-backend
+
+      # Build and Push Frontend
+      - name: Build Frontend Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/devops-frontend ./frontend
+
+      - name: Push Frontend Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/devops-frontend
