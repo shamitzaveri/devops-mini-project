@@ -1,0 +1,19 @@
+<html>
+<body style="text-align:center;">
+    <h1>Product Recommender</h1>
+    <input id="itemInput" placeholder="Enter product (shoes, laptop...)" />
+    <button onclick="getData()">Get Recommendations</button>
+    <pre id="result"></pre>
+
+    <script>
+        function getData() {
+            let item = document.getElementById("itemInput").value;
+            // CHANGED: Use localhost for running on MacBook
+            fetch("http://localhost:5001/recommend?item=" + item)
+                .then(res => res.json())
+                .then(data => document.getElementById("result").textContent = 
+                JSON.stringify(data, null, 2));
+        }
+    </script>
+</body>
+</html>
